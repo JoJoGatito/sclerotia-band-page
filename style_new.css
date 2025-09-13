@@ -1,0 +1,889 @@
+/* Custom Font Declarations */
+@font-face {
+    font-family: 'Mushroom';
+    src: url('assets/fonts/Mushroom-Regular.otf') format('opentype'),
+         url('assets/fonts/Mushroom-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Custom Properties */
+:root {
+    /* Base Colors */
+    --color-mushroom-brown: #8B7355;
+    --color-mushroom-tan: #D4C5B9;
+    --color-white: #ffffff;
+    --color-black: #000000;
+    
+    /* Animation Timings */
+    --transition-slow: 700ms;
+    --transition-medium: 350ms;
+    --transition-fast: 200ms;
+    
+    /* Dish Dimensions */
+    --dish-size: 320px;
+    --dish-padding: 15px;
+    --dish-border: 8px;
+    --dish-rim-blur: 6px;
+    
+    /* Z-index Layers */
+    --z-glass: 10;
+    --z-colony: 5;
+    --z-cover: 1;
+    --z-label: 15;
+}
+
+/* Base Styles */
+body {
+    margin: 0;
+    font-family: 'Mushroom', 'Courier New', monospace;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    overflow-x: hidden;
+}
+
+/* Existing Canvas & Header Styles */
+#canvasContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: var(--color-black);
+    z-index: -1;
+}
+
+#canvas {
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Styling */
+header {
+    position: relative;
+    z-index: 10;
+    padding: 2em 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+}
+
+header h1 {
+    text-align: center;
+    font-size: 3.5em;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    background: linear-gradient(45deg, var(--color-mushroom-brown), var(--color-mushroom-tan), var(--color-mushroom-brown));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes shimmer {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
+
+@keyframes bio-pulse {
+    0%, 100% {
+        opacity: 0.8;
+        filter: brightness(1);
+    }
+    50% {
+        opacity: 1;
+        filter: brightness(1.2);
+    }
+}
+
+@keyframes colony-grow {
+    0% {
+        mask-size: 0% 0%;
+        opacity: 0;
+    }
+    100% {
+        mask-size: 100% 100%;
+        opacity: 1;
+    }
+}
+
+@keyframes label-slide {
+    0% {
+        transform: translateX(-100%) scale(0.9);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Lab Section Styling */
+#albums {
+    position: relative;
+    z-index: 5;
+    padding: 3em 0 5em;
+    background: 
+        repeating-linear-gradient(
+            90deg,
+            rgba(255,255,255,0.01) 0,
+            rgba(255,255,255,0.01) 1px,
+            transparent 1px,
+            transparent 40px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            rgba(255,255,255,0.01) 0,
+            rgba(255,255,255,0.01) 1px,
+            transparent 1px,
+            transparent 40px
+        ),
+        linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 100%);
+}
+
+/* Lab Shelf Noise Effect */
+#albums::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.02"/%3E%3C/svg%3E');
+    pointer-events: none;
+    opacity: 0.3;
+    mix-blend-mode: overlay;
+}
+
+/* Horizontal Scrolling Container */
+.albums-scroll {
+    display: flex;
+    gap: 3em;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 3em 2em 2em;
+    margin: 0;
+    list-style: none;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 2em;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar Styling */
+.albums-scroll::-webkit-scrollbar {
+    height: 10px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+
+.albums-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, var(--color-mushroom-brown), var(--color-mushroom-tan));
+    border-radius: 10px;
+    border: 2px solid rgba(0,0,0,0.3);
+}
+
+/* Petri Dish Container */
+.dish {
+    scroll-snap-align: center;
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Petri Dish Button */
+.dish-btn {
+    width: var(--dish-size);
+    height: var(--dish-size);
+    border-radius: 50%;
+    position: relative;
+    overflow: visible;
+    border: none;
+    background: radial-gradient(circle at center, #0a0a0a 60%, #000 100%);
+    cursor: pointer;
+    padding: 0;
+    will-change: transform;
+    transition: transform var(--transition-medium) cubic-bezier(0.4, 0, 0.2, 1);
+    isolation: isolate;
+}
+
+/* Glass Rim Effect */
+.dish-glass {
+    position: absolute;
+    inset: calc(-1 * var(--dish-border));
+    border-radius: 50%;
+    border: var(--dish-border) solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(var(--dish-rim-blur));
+    -webkit-backdrop-filter: blur(var(--dish-rim-blur));
+    background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    box-shadow:
+        inset 0 0 0 2px rgba(255,255,255,0.15),
+        inset 0 0 40px rgba(255,255,255,0.1),
+        0 5px 15px rgba(0,0,0,0.3),
+        0 10px 30px rgba(0,0,0,0.2);
+    pointer-events: none;
+    z-index: var(--z-glass);
+}
+
+/* Condensation Effect */
+.dish-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(2px 2px at 70% 65%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(2px 2px at 40% 80%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(2px 2px at 80% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(2px 2px at 50% 50%, rgba(255,255,255,0.4) 0%, transparent 100%);
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+}
+
+/* Album Cover */
+.cover {
+    position: absolute;
+    inset: var(--dish-padding);
+    width: calc(100% - (var(--dish-padding) * 2));
+    height: calc(100% - (var(--dish-padding) * 2));
+    object-fit: cover;
+    border-radius: 50%;
+    filter: saturate(0.85) contrast(1.1) brightness(0.95);
+    z-index: var(--z-cover);
+}
+
+/* Hover & Focus States */
+@media (hover: hover) {
+    .dish-btn:hover,
+    .dish-btn:focus-visible {
+        transform: translateY(-8px) scale(1.05);
+    }
+
+    .dish-btn:hover .dish-glass,
+    .dish-btn:focus-visible .dish-glass {
+        box-shadow:
+            inset 0 0 0 2px rgba(255,255,255,0.2),
+            inset 0 0 60px rgba(255,255,255,0.15),
+            0 8px 20px rgba(0,0,0,0.4),
+            0 15px 40px rgba(0,0,0,0.3);
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .dish-btn {
+        transition: none;
+    }
+    
+    .dish-btn:hover,
+    .dish-btn:focus-visible {
+        transform: scale(1.02);
+    }
+}
+
+/* Bioluminescent Glow Effect */
+.dish::before {
+    content: '';
+    position: absolute;
+    inset: calc(-1 * var(--dish-border) - 10px);
+    border-radius: 50%;
+    background: radial-gradient(
+        circle at center,
+        var(--glow-color, var(--color-white)) 0%,
+        transparent 70%
+    );
+    opacity: 0;
+    filter: blur(10px);
+    transition: opacity var(--transition-medium) ease;
+    z-index: 0;
+}
+
+/* Custom Palette Support */
+.dish {
+    --primary-color: var(--color-mushroom-brown);
+    --secondary-color: var(--color-mushroom-tan);
+    --glow-color: var(--color-white);
+}
+
+.dish[data-palette-primary] {
+    --primary-color: var(--data-palette-primary);
+}
+
+.dish[data-palette-secondary] {
+    --secondary-color: var(--data-palette-secondary);
+}
+
+.dish[data-glow] {
+    --glow-color: var(--data-glow);
+}
+
+/* Bioluminescent Animation */
+@keyframes bioluminescent-pulse {
+    0%, 100% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.05);
+    }
+}
+
+/* Colony Styles */
+.colony {
+    position: absolute;
+    inset: var(--dish-padding);
+    border-radius: 50%;
+    background:
+        conic-gradient(
+            from 0deg at 50% 50%,
+            var(--primary-color) 0%,
+            var(--secondary-color) 25%,
+            var(--primary-color) 50%,
+            var(--secondary-color) 75%,
+            var(--primary-color) 100%
+        ),
+        radial-gradient(
+            circle at center,
+            var(--secondary-color) 0%,
+            var(--primary-color) 100%
+        );
+    opacity: 0;
+    mix-blend-mode: soft-light;
+    z-index: var(--z-colony);
+    transition: all var(--transition-medium) ease;
+    transform-origin: center;
+    
+    /* Organic Growth Mask */
+    mask-image:
+        radial-gradient(circle at center, black 0%, transparent 70%),
+        url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="4" seed="1"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"%3E%3C/rect%3E%3C/svg%3E');
+    mask-size: 0% 0%, 200% 200%;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    will-change: mask-size, transform, opacity;
+}
+
+/* Lab Label Styling */
+.label {
+    position: absolute;
+    bottom: 15%;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0.75em 1.5em;
+    border-radius: 4px 0 0 4px;
+    color: var(--color-black);
+    font-size: 0.9em;
+    transform: translateX(calc(100% - 1em));
+    transition: transform var(--transition-medium) cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: var(--z-label);
+    box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+/* Red Dot Sticker */
+.label::before {
+    content: '';
+    position: absolute;
+    top: 0.75em;
+    left: 0.75em;
+    width: 6px;
+    height: 6px;
+    background: #ff3b30;
+    border-radius: 50%;
+    box-shadow: 0 0 2px rgba(255, 59, 48, 0.4), inset 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Label Content Layout */
+.label .title {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.25em;
+}
+
+/* Additional Label Styles */
+.label .year {
+    display: block;
+    font-size: 0.85em;
+    opacity: 0.7;
+}
+
+.quick-actions {
+    display: flex;
+    gap: 0.75em;
+    margin-top: 0.75em;
+    padding-top: 0.75em;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.action {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: none;
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--color-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    text-decoration: none;
+    transition: all var(--transition-fast) ease;
+}
+
+.action:hover,
+.action:focus-visible {
+    background: rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+.label .year {
+    display: block;
+    font-size: 0.85em;
+    opacity: 0.7;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    gap: 0.75em;
+    margin-top: 0.75em;
+    padding-top: 0.75em;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.action {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: none;
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--color-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    text-decoration: none;
+    transition: all var(--transition-fast) ease;
+}
+
+.action:hover,
+.action:focus-visible {
+    background: rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Label Hover States */
+@media (hover: hover) {
+    .dish-btn:hover .label,
+    .dish-btn:focus-visible .label {
+        transform: translateX(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .label {
+        transition: none;
+    }
+    
+    .dish-btn:hover .label,
+    .dish-btn:focus-visible .label {
+        transform: translateX(-1em);
+    }
+}
+.label .year {
+    display: block;
+    font-size: 0.85em;
+    opacity: 0.7;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    gap: 0.75em;
+    margin-top: 0.75em;
+    padding-top: 0.75em;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.action {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: none;
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--color-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    text-decoration: none;
+    transition: all var(--transition-fast) ease;
+}
+
+.action:hover,
+.action:focus-visible {
+    background: rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Label Hover Animation */
+@media (hover: hover) {
+    .dish-btn:hover .label,
+    .dish-btn:focus-visible .label {
+        transform: translateX(0);
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .label {
+        transition: none;
+    }
+    
+    .dish-btn:hover .label,
+    .dish-btn:focus-visible .label {
+        transform: translateX(-1em);
+    }
+}
+.label .year {
+    display: block;
+    font-size: 0.85em;
+    opacity: 0.7;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    gap: 0.75em;
+    margin-top: 0.75em;
+    padding-top: 0.75em;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.action {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: none;
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--color-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    text-decoration: none;
+    transition: all var(--transition-fast) ease;
+}
+
+.action:hover,
+.action:focus-visible {
+    background: rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Label Hover Animation */
+@media (hover: hover) {
+    .dish-btn:hover .label,
+    .dish-btn:focus-visible .label {
+        transform: translateX(0);
+    }
+}
+
+/* Colony Growth Animation */
+@keyframes colony-grow {
+    0% {
+        opacity: 0;
+        mask-size: 0% 0%, 200% 200%;
+        transform: scale(0.8) rotate(0deg);
+    }
+    50% {
+        opacity: 0.4;
+        mask-size: 60% 60%, 200% 200%;
+        transform: scale(0.9) rotate(180deg);
+    }
+    100% {
+        opacity: 0.8;
+        mask-size: 100% 100%, 200% 200%;
+        transform: scale(1) rotate(360deg);
+    }
+}
+
+/* Colony Growth States */
+.colony[data-growth-state="growing"] {
+    animation: colony-grow var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.colony[data-growth-state="active"] {
+    opacity: 0.8;
+    mask-size: 100% 100%, 200% 200%;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .label {
+        transition: none;
+    }
+    
+    .dish-btn:hover .label,
+    .dish-btn:focus-visible .label {
+        transform: translateX(-1em);
+    }
+}
+.label .year {
+    display: block;
+    font-size: 0.85em;
+    opacity: 0.7;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    gap: 0.75em;
+    margin-top: 0.75em;
+    padding-top: 0.75em;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.action {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: none;
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--color-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    text-decoration: none;
+    transition: all var(--transition-fast) ease;
+}
+
+.action:hover,
+.action:focus-visible {
+    background: rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Label Hover Animation */
+@media (hover: hover) {
+    .dish-btn:hover .label,
+    .dish-btn:focus-visible .label {
+        transform: translateX(0);
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .label {
+        transition: none;
+    }
+    
+    .dish-btn:hover .label,
+    .dish-btn:focus-visible .label {
+        transform: translateX(-1em);
+    }
+}
+.label .year {
+    display: block;
+    font-size: 0.85em;
+    opacity: 0.7;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    gap: 0.75em;
+    margin-top: 0.75em;
+    padding-top: 0.75em;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.action {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: none;
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--color-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    text-decoration: none;
+    transition: all var(--transition-fast) ease;
+}
+
+.action:hover,
+.action:focus-visible {
+    background: rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Label Hover Animation */
+@media (hover: hover) {
+    .dish-btn:hover .label,
+    .dish-btn:focus-visible .label {
+        transform: translateX(0);
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .label {
+        transition: none;
+    }
+    
+    .dish-btn:hover .label,
+    .dish-btn:focus-visible .label {
+        transform: translateX(-1em);
+    }
+}
+
+/* Colony Growth States */
+.colony[data-growth-state="growing"] {
+    animation: colony-grow var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.colony[data-growth-state="active"] {
+    opacity: 0.8;
+    mask-size: 100% 100%, 200% 200%;
+}
+
+/* Enhanced Colony Growth Animation */
+@keyframes colony-grow {
+    0% {
+        opacity: 0;
+        mask-size: 0% 0%, 200% 200%;
+        transform: scale(0.8) rotate(0deg);
+    }
+    50% {
+        opacity: 0.4;
+        mask-size: 60% 60%, 200% 200%;
+        transform: scale(0.9) rotate(180deg);
+    }
+    100% {
+        opacity: 0.8;
+        mask-size: 100% 100%, 200% 200%;
+        transform: scale(1) rotate(360deg);
+    }
+    
+    .label .year {
+        display: block;
+        font-size: 0.85em;
+        opacity: 0.7;
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+        display: flex;
+        gap: 0.75em;
+        margin-top: 0.75em;
+        padding-top: 0.75em;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .action {
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        border: none;
+        background: rgba(0, 0, 0, 0.1);
+        color: var(--color-black);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8em;
+        text-decoration: none;
+        transition: all var(--transition-fast) ease;
+    }
+    
+    .action:hover,
+    .action:focus-visible {
+        background: rgba(0, 0, 0, 0.2);
+        transform: translateY(-1px);
+    }
+    
+    /* Label Slide Animation */
+    @media (hover: hover) {
+        .dish-btn:hover .label,
+        .dish-btn:focus-visible .label {
+            transform: translateX(0);
+        }
+    }
+    
+    /* Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+        .label {
+            transition: none;
+        }
+        
+        .dish-btn:hover .label,
+        .dish-btn:focus-visible .label {
+            transform: translateX(-1em);
+        }
+    }
+    50% {
+        opacity: 0.4;
+        mask-size: 60% 60%, 200% 200%;
+        transform: scale(0.9) rotate(180deg);
+    }
+    100% {
+        opacity: 0.8;
+        mask-size: 100% 100%, 200% 200%;
+        transform: scale(1) rotate(360deg);
+    }
+}
+
+/* Gills Overlay */
+.gills-overlay {
+    position: absolute;
+    inset: var(--dish-padding);
+    border-radius: 50%;
+    background:
+        repeating-conic-gradient(
+            from 0deg at 50% 50%,
+            transparent 0deg,
+            transparent 5deg,
+            rgba(0,0,0,0.1) 5deg,
+            rgba(0,0,0,0.1) 6deg
+        );
+    opacity: 0;
+    mix-blend-mode: multiply;
+    z-index: calc(var(--z-colony) + 1);
+    transition: opacity var(--transition-medium) ease;
+    pointer-events: none;
+}
+
+/* Hover & Focus States */
+@media (hover: hover) {
+    .dish-btn:hover .colony,
+    .dish-btn:focus-visible .colony {
+        opacity: 0.8;
+    }
+
+    .dish-btn:hover .gills-overlay,
+    .dish-btn:focus-visible .gills-overlay {
+        opacity: 1;
+    }
+
+    .dish-btn:hover::before,
+    .dish-btn:focus-visible::before {
+        opacity: 0.3;
+        animation: bioluminescent-pulse 4s ease-in-out infinite;
+    }
+
+    /* Start growth animation on hover */
+    .dish-btn:hover .colony[data-growth-state="dormant"],
+    .dish-btn:focus-visible .colony[data-growth-state="dormant"] {
+        animation: colony-grow var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .dish-btn:hover .colony,
+    .dish-btn:focus-visible .colony,
+    .dish-btn:hover::before,
+    .dish-btn:focus-visible::before {
+        animation: none;
+        opacity: 0.5;
+    }
+}

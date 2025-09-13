@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sclerotia</title>
+    <link rel="stylesheet" href="style_new.css">
+</head>
+<body>
+    <div id="canvasContainer">
+        <canvas id="canvas"></canvas>
+    </div>
+    <header>
+        <h1>Sclerotia</h1>
+        <nav class="mycelial-nav">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Music</a></li>
+                <li><a href="#">Shows</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero">
+            <h2>New Album Out Now!</h2>
+        </section>
+        <section id="albums" aria-label="Album Laboratory">
+            <h2>The Lab</h2>
+            <div class="lab-shelf">
+                <div class="shelf-edge top"></div>
+                <div class="shelf-edge bottom"></div>
+                <ul class="albums-scroll" role="list">
+                <li class="dish" data-palette-primary="#8B7355" data-palette-secondary="#D4C5B9" data-glow="#ffffff" data-album-id="liquid-culture">
+                    <button class="dish-btn" aria-expanded="false" aria-controls="liquid-culture-content">
+                        <div class="dish-glass" aria-hidden="true"></div>
+                        <img class="cover" src="assets/album-art/liquid-culture.webp" alt="Liquid Culture album cover" loading="lazy" decoding="async">
+                        <div class="colony" aria-hidden="true" data-growth-state="dormant"></div>
+                        <div class="gills-overlay" aria-hidden="true"></div>
+                        <div class="label" aria-hidden="true">
+                            <span class="title">Liquid Culture</span>
+                            <span class="year">2025</span>
+                            <div class="quick-actions">
+                                <button class="action play-btn" aria-label="Play Liquid Culture">
+                                    <span class="icon">▶</span>
+                                </button>
+                                <a href="https://sclerotia.bandcamp.com/album/liquid-culture" target="_blank" rel="noopener" class="action" aria-label="Listen on Bandcamp">
+                                    <span class="icon">BC</span>
+                                </a>
+                                <a href="https://open.spotify.com/album/liquid-culture" target="_blank" rel="noopener" class="action" aria-label="Listen on Spotify">
+                                    <span class="icon">SP</span>
+                                </a>
+                            </div>
+                        </div>
+                    </button>
+                    <div id="liquid-culture-content" class="tracklist" hidden>
+                        <ol>
+                            <li>There Go My Ego — 3:34</li>
+                            <li>Wannabe Wook — 3:49</li>
+                            <li>Fentanyl Fight Club — 3:51</li>
+                            <li>Fingerprints — 6:41</li>
+                            <li>Horseshoe — 4:15</li>
+                            <li>Mister Carwash — 6:03</li>
+                            <li>High Way — 3:53</li>
+                            <li>Caress — 6:30</li>
+                            <li>Fairy Circles — 5:12</li>
+                            <li>Radical Art Of Existence — 4:40</li>
+                            <li>La Mort, Saurai-je? — 7:09</li>
+                        </ol>
+                    </div>
+                </li>
+                <li class="dish" data-palette-primary="#7e6a4f" data-palette-secondary="#cbbbae" data-glow="#ffffff" data-album-id="fruiting-bodies">
+                    <button class="dish-btn" aria-expanded="false" aria-controls="fruiting-bodies-content">
+                        <div class="dish-glass" aria-hidden="true"></div>
+                        <img class="cover" src="assets/album-art/fruiting-bodies-ep.webp" alt="Fruiting Bodies EP cover" loading="lazy" decoding="async">
+                        <div class="colony" aria-hidden="true" data-growth-state="dormant"></div>
+                        <div class="gills-overlay" aria-hidden="true"></div>
+                        <div class="label" aria-hidden="true">
+                            <span class="title">Fruiting Bodies EP</span>
+                            <span class="year">2024</span>
+                            <div class="quick-actions">
+                                <button class="action play-btn" aria-label="Play Fruiting Bodies EP">
+                                    <span class="icon">▶</span>
+                                </button>
+                                <a href="https://sclerotia.bandcamp.com/album/fruiting-bodies-ep" target="_blank" rel="noopener" class="action" aria-label="Listen on Bandcamp">
+                                    <span class="icon">BC</span>
+                                </a>
+                                <a href="https://open.spotify.com/album/fruiting-bodies" target="_blank" rel="noopener" class="action" aria-label="Listen on Spotify">
+                                    <span class="icon">SP</span>
+                                </a>
+                            </div>
+                        </div>
+                    </button>
+                    <div id="fruiting-bodies-content" class="tracklist" hidden>
+                        <ol>
+                            <li>Intro — 0:31</li>
+                            <li>Fentanyl Fight Club — 3:44</li>
+                        </ol>
+                    </div>
+                </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Sclerotia</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sat/0.8.0/SAT.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.11.0/underscore-min.js"></script>
+    <script src="slime_mold.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
