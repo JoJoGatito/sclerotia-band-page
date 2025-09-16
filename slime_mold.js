@@ -378,7 +378,21 @@ var angle_part_slime = 0.25;
 SlimeMold.initCanvas('canvas');
 SlimeMold.init(window.innerWidth, window.innerHeight);
 requestAnimationFrame(SlimeMold.render);
-window.addEventListener('resize', resize);
-function resize(){
-  SlimeMold.init(window.innerWidth, window.innerHeight);
-}
+// Debounced resize to prevent resets on mobile scroll
+let resizeTimeout;
+let lastWidth = window.innerWidth;
+let lastHeight = window.innerHeight;
+
+window.addEventListener('resize', function() {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(function() {
+    // Only reinit if size changed significantly (more than 50px)
+    const newWidth = window.innerWidth;
+    const newHeight = window.innerHeight;
+    if (Math.abs(newWidth - lastWidth) > 50 || Math.abs(newHeight - lastHeight) > 50) {
+      lastWidth = newWidth;
+      lastHeight = newHeight;
+      SlimeMold.init(newWidth, newHeight);
+    }
+  }, 250); // Wait 250ms after resize stops
+});
