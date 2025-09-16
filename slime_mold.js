@@ -378,21 +378,20 @@ var angle_part_slime = 0.25;
 SlimeMold.initCanvas('canvas');
 SlimeMold.init(window.innerWidth, window.innerHeight);
 requestAnimationFrame(SlimeMold.render);
-// Debounced resize to prevent resets on mobile scroll
+// Only resize on width changes (orientation), ignore height changes (address bar)
 let resizeTimeout;
 let lastWidth = window.innerWidth;
-let lastHeight = window.innerHeight;
 
 window.addEventListener('resize', function() {
   clearTimeout(resizeTimeout);
   resizeTimeout = setTimeout(function() {
-    // Only reinit if size changed significantly (more than 50px)
     const newWidth = window.innerWidth;
-    const newHeight = window.innerHeight;
-    if (Math.abs(newWidth - lastWidth) > 50 || Math.abs(newHeight - lastHeight) > 50) {
+    // Only reinit if WIDTH changed (orientation change)
+    // Ignore height changes which are usually address bar show/hide
+    if (Math.abs(newWidth - lastWidth) > 10) {
       lastWidth = newWidth;
-      lastHeight = newHeight;
-      SlimeMold.init(newWidth, newHeight);
+      // Use full window height always
+      SlimeMold.init(newWidth, window.innerHeight);
     }
-  }, 250); // Wait 250ms after resize stops
+  }, 300); // Wait 300ms after resize stops
 });
