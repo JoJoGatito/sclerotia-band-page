@@ -28,80 +28,112 @@
             <h2>New Album Out Now!</h2>
         </section>
         <section id="albums" aria-label="Album Laboratory">
-            <h2>The Lab</h2>
-            <div class="lab-shelf">
-                <div class="shelf-edge top"></div>
-                <div class="shelf-edge bottom"></div>
-                <ul class="albums-scroll" role="list">
-                <li class="dish" data-palette-primary="#8B7355" data-palette-secondary="#D4C5B9" data-glow="#ffffff" data-album-id="liquid-culture">
-                    <button class="dish-btn" aria-expanded="false" aria-controls="liquid-culture-content">
-                        <div class="dish-glass" aria-hidden="true"></div>
-                        <img class="cover" src="assets/album-art/liquid-culture.webp" alt="Liquid Culture album cover" loading="lazy" decoding="async">
-                        <div class="colony" aria-hidden="true" data-growth-state="dormant"></div>
-                        <div class="gills-overlay" aria-hidden="true"></div>
-                        <div class="label" aria-hidden="true">
-                            <span class="title">Liquid Culture</span>
-                            <span class="year">2025</span>
-                            <div class="quick-actions">
-                                <button class="action play-btn" aria-label="Play Liquid Culture">
-                                    <span class="icon">▶</span>
-                                </button>
-                                <a href="https://sclerotia.bandcamp.com/album/liquid-culture" target="_blank" rel="noopener" class="action" aria-label="Listen on Bandcamp">
-                                    <span class="icon">BC</span>
-                                </a>
-                                <a href="https://open.spotify.com/album/liquid-culture" target="_blank" rel="noopener" class="action" aria-label="Listen on Spotify">
-                                    <span class="icon">SP</span>
-                                </a>
-                            </div>
-                        </div>
-                    </button>
-                    <div id="liquid-culture-content" class="tracklist" hidden>
-                        <ol>
-                            <li>There Go My Ego — 3:34</li>
-                            <li>Wannabe Wook — 3:49</li>
-                            <li>Fentanyl Fight Club — 3:51</li>
-                            <li>Fingerprints — 6:41</li>
-                            <li>Horseshoe — 4:15</li>
-                            <li>Mister Carwash — 6:03</li>
-                            <li>High Way — 3:53</li>
-                            <li>Caress — 6:30</li>
-                            <li>Fairy Circles — 5:12</li>
-                            <li>Radical Art Of Existence — 4:40</li>
-                            <li>La Mort, Saurai-je? — 7:09</li>
-                        </ol>
-                    </div>
-                </li>
-                <li class="dish" data-palette-primary="#7e6a4f" data-palette-secondary="#cbbbae" data-glow="#ffffff" data-album-id="fruiting-bodies">
-                    <button class="dish-btn" aria-expanded="false" aria-controls="fruiting-bodies-content">
-                        <div class="dish-glass" aria-hidden="true"></div>
-                        <img class="cover" src="assets/album-art/fruiting-bodies-ep.webp" alt="Fruiting Bodies EP cover" loading="lazy" decoding="async">
-                        <div class="colony" aria-hidden="true" data-growth-state="dormant"></div>
-                        <div class="gills-overlay" aria-hidden="true"></div>
-                        <div class="label" aria-hidden="true">
-                            <span class="title">Fruiting Bodies EP</span>
-                            <span class="year">2024</span>
-                            <div class="quick-actions">
-                                <button class="action play-btn" aria-label="Play Fruiting Bodies EP">
-                                    <span class="icon">▶</span>
-                                </button>
-                                <a href="https://sclerotia.bandcamp.com/album/fruiting-bodies-ep" target="_blank" rel="noopener" class="action" aria-label="Listen on Bandcamp">
-                                    <span class="icon">BC</span>
-                                </a>
-                                <a href="https://open.spotify.com/album/fruiting-bodies" target="_blank" rel="noopener" class="action" aria-label="Listen on Spotify">
-                                    <span class="icon">SP</span>
-                                </a>
-                            </div>
-                        </div>
-                    </button>
-                    <div id="fruiting-bodies-content" class="tracklist" hidden>
-                        <ol>
-                            <li>Intro — 0:31</li>
-                            <li>Fentanyl Fight Club — 3:44</li>
-                        </ol>
-                    </div>
-                </li>
-                </ul>
+          <h2>The Lab</h2>
+          
+          <!-- Album Carousel Container -->
+          <div class="carousel-container">
+            <!-- Optional Navigation Buttons -->
+            <button class="carousel-nav prev" aria-label="Previous album">◀</button>
+            <button class="carousel-nav next" aria-label="Next album">▶</button>
+            
+            <!-- Album List - Modified from current structure -->
+            <ul class="albums-carousel" role="list">
+              <!-- Each album item structure remains similar but with modified behavior -->
+              <li class="dish" data-album-id="liquid-culture" data-palette-primary="#8B7355" data-palette-secondary="#D4C5B9" data-glow="#ffffff">
+                <button class="dish-btn" aria-expanded="false" aria-controls="liquid-culture-details">
+                  <!-- Existing visual elements remain -->
+                  <div class="dish-glass" aria-hidden="true"></div>
+                  <img class="cover" src="assets/album-art/liquid-culture.webp" alt="Liquid Culture album cover" loading="lazy" decoding="async">
+                  <div class="colony" aria-hidden="true" data-growth-state="dormant"></div>
+                  <div class="gills-overlay" aria-hidden="true"></div>
+                  <div class="label" aria-hidden="true">
+                    <span class="title">Liquid Culture</span>
+                    <span class="year">2025</span>
+                  </div>
+                </button>
+              </li>
+              <li class="dish" data-album-id="fruiting-bodies" data-palette-primary="#7e6a4f" data-palette-secondary="#cbbbae" data-glow="#ffffff">
+                <button class="dish-btn" aria-expanded="false" aria-controls="fruiting-bodies-details">
+                  <div class="dish-glass" aria-hidden="true"></div>
+                  <img class="cover" src="assets/album-art/fruiting-bodies-ep.webp" alt="Fruiting Bodies EP cover" loading="lazy" decoding="async">
+                  <div class="colony" aria-hidden="true" data-growth-state="dormant"></div>
+                  <div class="gills-overlay" aria-hidden="true"></div>
+                  <div class="label" aria-hidden="true">
+                    <span class="title">Fruiting Bodies EP</span>
+                    <span class="year">2024</span>
+                  </div>
+                </button>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- NEW: Album Details Section (Initially Hidden) -->
+          <div class="album-details-container">
+            <div id="liquid-culture-details" class="album-details" hidden>
+              <div class="album-info">
+                <h3>Liquid Culture</h3>
+                <span class="year">2025</span>
+                
+                <!-- Quick Actions (moved from label) -->
+                <div class="quick-actions">
+                  <button class="action play-btn" aria-label="Play Liquid Culture">
+                    <span class="icon">▶</span>
+                  </button>
+                  <a href="https://sclerotia.bandcamp.com/album/liquid-culture" target="_blank" rel="noopener" class="action" aria-label="Listen on Bandcamp">
+                    <span class="icon">BC</span>
+                  </a>
+                  <a href="https://open.spotify.com/album/liquid-culture" target="_blank" rel="noopener" class="action" aria-label="Listen on Spotify">
+                    <span class="icon">SP</span>
+                  </a>
+                </div>
+              </div>
+              
+              <!-- Tracklist (moved from overlay) -->
+              <div class="tracklist">
+                <ol>
+                    <li>There Go My Ego — 3:34</li>
+                    <li>Wannabe Wook — 3:49</li>
+                    <li>Fentanyl Fight Club — 3:51</li>
+                    <li>Fingerprints — 6:41</li>
+                    <li>Horseshoe — 4:15</li>
+                    <li>Mister Carwash — 6:03</li>
+                    <li>High Way — 3:53</li>
+                    <li>Caress — 6:30</li>
+                    <li>Fairy Circles — 5:12</li>
+                    <li>Radical Art Of Existence — 4:40</li>
+                    <li>La Mort, Saurai-je? — 7:09</li>
+                </ol>
+              </div>
             </div>
+            
+            <!-- Repeat for other albums -->
+            <div id="fruiting-bodies-details" class="album-details" hidden>
+                <div class="album-info">
+                    <h3>Fruiting Bodies EP</h3>
+                    <span class="year">2024</span>
+                    
+                    <!-- Quick Actions (moved from label) -->
+                    <div class="quick-actions">
+                        <button class="action play-btn" aria-label="Play Fruiting Bodies EP">
+                            <span class="icon">▶</span>
+                        </button>
+                        <a href="https://sclerotia.bandcamp.com/album/fruiting-bodies-ep" target="_blank" rel="noopener" class="action" aria-label="Listen on Bandcamp">
+                            <span class="icon">BC</span>
+                        </a>
+                        <a href="https://open.spotify.com/album/fruiting-bodies" target="_blank" rel="noopener" class="action" aria-label="Listen on Spotify">
+                            <span class="icon">SP</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="tracklist">
+                    <ol>
+                        <li>Intro — 0:31</li>
+                        <li>Fentanyl Fight Club — 3:44</li>
+                    </ol>
+                </div>
+            </div>
+          </div>
         </section>
     </main>
 

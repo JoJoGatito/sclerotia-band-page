@@ -123,8 +123,9 @@ header h1 {
 #albums {
     position: relative;
     z-index: 5;
-    padding: 3em 0 5em;
-    background: 
+    padding: 2em 0 3em; /* Reduced padding */
+    /* Keep existing background styles */
+    background:
         repeating-linear-gradient(
             90deg,
             rgba(255,255,255,0.01) 0,
@@ -139,7 +140,7 @@ header h1 {
             transparent 1px,
             transparent 40px
         ),
-        linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 100%);
+        linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.2) 100%);
 }
 
 /* Lab Shelf Noise Effect */
@@ -153,28 +154,65 @@ header h1 {
     mix-blend-mode: overlay;
 }
 
-/* Horizontal Scrolling Container */
-.albums-scroll {
-    display: flex;
-    gap: 3em;
-    overflow-x: auto;
-    overflow-y: visible;
-    padding: 3em 2em 2em;
-    margin: 0;
-    list-style: none;
-    scroll-snap-type: x mandatory;
-    scroll-padding: 2em;
-    -webkit-overflow-scrolling: touch;
+/* Carousel Container */
+.carousel-container {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto 2em; /* Center horizontally with bottom margin */
+  padding: 0 3em; /* Space for navigation buttons */
+}
+
+/* Carousel Navigation */
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--color-white);
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all var(--transition-fast) ease;
+}
+
+.carousel-nav.prev { left: 0; }
+.carousel-nav.next { right: 0; }
+
+.carousel-nav:hover,
+.carousel-nav:focus-visible {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Updated Albums List */
+.albums-carousel {
+  display: flex;
+  justify-content: center; /* Center the albums */
+  gap: 2em; /* Reduced from 3em */
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 2em 1em; /* Reduced padding */
+  margin: 0;
+  list-style: none;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Scrollbar Styling */
-.albums-scroll::-webkit-scrollbar {
+.albums-carousel::-webkit-scrollbar {
     height: 10px;
     background: rgba(0,0,0,0.3);
     border-radius: 10px;
 }
 
-.albums-scroll::-webkit-scrollbar-thumb {
+.albums-carousel::-webkit-scrollbar-thumb {
     background: linear-gradient(90deg, var(--color-mushroom-brown), var(--color-mushroom-tan));
     border-radius: 10px;
     border: 2px solid rgba(0,0,0,0.3);
@@ -187,10 +225,10 @@ header h1 {
     flex-shrink: 0;
 }
 
-/* Petri Dish Button */
+/* Adjust Petri Dish Size */
 .dish-btn {
-    width: var(--dish-size);
-    height: var(--dish-size);
+    width: calc(var(--dish-size) * 0.8); /* Make dishes smaller */
+    height: calc(var(--dish-size) * 0.8);
     border-radius: 50%;
     position: relative;
     overflow: visible;
@@ -208,9 +246,8 @@ header h1 {
     position: absolute;
     inset: calc(-1 * var(--dish-border));
     border-radius: 50%;
-    border: var(--dish-border) solid rgba(255,255,255,0.08);
-    backdrop-filter: blur(var(--dish-rim-blur));
-    -webkit-backdrop-filter: blur(var(--dish-rim-blur));
+    border: var(--dish-border) solid rgba(255,255,255,0.15);
+    /* Removing blur filters completely */
     background:
         radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, transparent 50%),
         radial-gradient(circle at 70% 70%, rgba(255,255,255,0.1) 0%, transparent 50%);
@@ -247,7 +284,7 @@ header h1 {
     height: calc(100% - (var(--dish-padding) * 2));
     object-fit: cover;
     border-radius: 50%;
-    filter: saturate(0.85) contrast(1.1) brightness(0.95);
+    filter: none; /* Remove all filters for maximum clarity */
     z-index: var(--z-cover);
 }
 
@@ -352,7 +389,7 @@ header h1 {
     border-radius: 4px 0 0 4px;
     color: var(--color-black);
     font-size: 0.9em;
-    transform: translateX(calc(100% - 1em));
+    transform: translateX(0);
     transition: transform var(--transition-medium) cubic-bezier(0.4, 0, 0.2, 1);
     z-index: var(--z-label);
     box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05);
@@ -411,113 +448,114 @@ header h1 {
     transform: translateY(-1px);
 }
 
-/* Expanded View */
-.dish[aria-expanded="true"] .dish-btn {
-    transform: scale(1.5);
+.dish-btn:focus-visible {
+    transform: scale(1.2);
     z-index: var(--z-expanded);
 }
 
-.dish[aria-expanded="true"] .dish-glass {
-    box-shadow:
-        inset 0 0 0 2px rgba(255,255,255,0.2),
-        inset 0 0 60px rgba(255,255,255,0.15),
-        0 8px 20px rgba(0,0,0,0.4),
-        0 15px 40px rgba(0,0,0,0.3);
+/* Updated for Active State */
+.dish.active .dish-btn {
+  transform: translateY(-10px) scale(1.1); /* Slight lift and scale instead of large expansion */
+  z-index: var(--z-expanded);
 }
 
-.tracklist {
-    position: absolute;
-    inset: var(--dish-padding);
-    border-radius: 50%;
-    overflow-y: auto;
-    color: var(--color-white);
-    background: rgba(0,0,0,0.7);
-    z-index: calc(var(--z-expanded) + 1);
-    opacity: 0;
-    transition: opacity var(--transition-medium) ease;
-    pointer-events: none;
-    -webkit-mask-image: radial-gradient(circle, white 50%, transparent 100%);
-    mask-image: radial-gradient(circle, white 50%, transparent 100%);
+.dish.active::before {
+    opacity: 0.2;
 }
 
-.dish[aria-expanded="true"] .tracklist {
-    opacity: 1;
-    pointer-events: auto;
+.dish.active .colony {
+    opacity: 0.7;
+    animation: bio-pulse 4s ease-in-out infinite;
 }
 
-.tracklist ol {
-    padding: 2em;
-    list-style-position: inside;
+.dish.active .colony[data-growth-state="dormant"] {
+    animation: colony-grow var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1) forwards,
+                 bio-pulse 4s var(--transition-slow) ease-in-out infinite;
 }
 
-/* Hover & Focus States */
-@media (hover: hover) {
-    .dish-btn:hover,
-    .dish-btn:focus-visible {
-        transform: translateY(-8px) scale(1.05);
-    }
-
-    .dish-btn:hover .dish-glass,
-    .dish-btn:focus-visible .dish-glass {
-        box-shadow:
-            inset 0 0 0 2px rgba(255,255,255,0.2),
-            inset 0 0 60px rgba(255,255,255,0.15),
-            0 8px 20px rgba(0,0,0,0.4),
-            0 15px 40px rgba(0,0,0,0.3);
-    }
-
-    .dish-btn:hover .colony,
-    .dish-btn:focus-visible .colony {
-        opacity: 0.8;
-    }
-
-    .dish-btn:hover .gills-overlay,
-    .dish-btn:focus-visible .gills-overlay {
-        opacity: 1;
-    }
-
-    .dish-btn:hover::before,
-    .dish-btn:focus-visible::before {
-        opacity: 0.3;
-        animation: bio-pulse 4s ease-in-out infinite;
-    }
-
-    .dish-btn:hover .colony[data-growth-state="dormant"],
-    .dish-btn:focus-visible .colony[data-growth-state="dormant"] {
-        animation: colony-grow var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
-    .dish-btn:hover .label,
-    .dish-btn:focus-visible .label {
-        transform: translateX(0);
-    }
+.dish.active .gills-overlay {
+    opacity: 0.1;
 }
 
-/* Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-    .dish-btn {
-        transition: none;
-    }
-    
-    .dish-btn:hover,
-    .dish-btn:focus-visible {
-        transform: scale(1.02);
-    }
+.dish.active .label {
+    transform: translateX(-20px);
+}
 
-    .dish-btn:hover .colony,
-    .dish-btn:focus-visible .colony,
-    .dish-btn:hover::before,
-    .dish-btn:focus-visible::before {
-        animation: none;
-        opacity: 0.5;
-    }
+/* New Album Details Container */
+.album-details-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: rgba(0,0,0,0.5);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+  transition: max-height var(--transition-medium) ease, 
+              opacity var(--transition-medium) ease;
+  max-height: 0;
+  opacity: 0;
+}
 
-    .label {
-        transition: none;
-    }
-    
-    .dish-btn:hover .label,
-    .dish-btn:focus-visible .label {
-        transform: translateX(-1em);
-    }
+.album-details-container.visible {
+  max-height: 500px; /* Adjust based on content */
+  opacity: 1;
+}
+
+/* Album Details Styling */
+.album-details {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em;
+  color: var(--color-white);
+}
+
+.album-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin-bottom: 1em;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 1em;
+}
+
+.album-info h3 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.album-info .year {
+  opacity: 0.7;
+}
+
+/* Tracklist Styling */
+.album-details .tracklist {
+  opacity: 1;
+  pointer-events: auto;
+  position: relative;
+  inset: auto;
+  background: transparent;
+  overflow: visible;
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+.album-details .tracklist ol {
+  padding: 0 0 0 1.5em;
+  list-style-position: outside;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .albums-carousel {
+    justify-content: flex-start; /* Left align on small screens */
+  }
+  
+  .dish-btn {
+    width: calc(var(--dish-size) * 0.7); /* Even smaller on mobile */
+    height: calc(var(--dish-size) * 0.7);
+  }
+  
+  .album-details {
+    padding: 1em;
+  }
 }
