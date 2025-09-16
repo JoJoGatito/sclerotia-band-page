@@ -10,11 +10,17 @@
 
 /* Custom Properties */
 :root {
-    /* Base Colors */
-    --color-mushroom-brown: #8B7355;
-    --color-mushroom-tan: #D4C5B9;
+    /* Base Colors - Updated to blue/green */
+    --color-primary: #2a9d8f;  /* teal green */
+    --color-secondary: #264653; /* dark blue-green */
+    --color-accent: #52b788;    /* lighter green */
+    --color-highlight: #1e6ba8; /* blue */
     --color-white: #ffffff;
     --color-black: #000000;
+    
+    /* Keep old colors for backward compatibility */
+    --color-mushroom-brown: #2a9d8f;
+    --color-mushroom-tan: #52b788;
     
     /* Animation Timings */
     --transition-slow: 700ms;
@@ -42,6 +48,7 @@ body {
     background-color: var(--color-black);
     color: var(--color-white);
     overflow-x: hidden;
+    line-height: 1.6;
 }
 
 /* Existing Canvas & Header Styles */
@@ -64,20 +71,28 @@ body {
 header {
     position: relative;
     z-index: 10;
-    padding: 2em 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+    padding: 3em 2em;
+    background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0) 100%);
+    pointer-events: none; /* Allow mouse events to pass through */
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 header h1 {
     text-align: center;
-    font-size: 3.5em;
-    margin: 0;
+    font-size: clamp(2.5em, 8vw, 4.5em);
+    margin: 0.5em 0;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
-    background: linear-gradient(45deg, var(--color-mushroom-brown), var(--color-mushroom-tan), var(--color-mushroom-brown));
+    letter-spacing: 0.3em;
+    background: linear-gradient(135deg, var(--color-highlight), var(--color-primary), var(--color-accent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: shimmer 3s ease-in-out infinite;
+    text-shadow: 0 2px 20px rgba(42, 157, 143, 0.4);
+    pointer-events: auto; /* Keep title interactive */
 }
 
 /* Animations */
@@ -119,11 +134,43 @@ header h1 {
     }
 }
 
+/* Hero Section */
+#hero {
+    text-align: center;
+    padding: 4em 2em;
+    position: relative;
+    z-index: 5;
+    pointer-events: none; /* Allow mouse events to pass through */
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#hero h2 {
+    font-size: clamp(1.8em, 5vw, 2.5em);
+    margin: 0.5em 0;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.hero-subtitle {
+    font-size: 1.2em;
+    opacity: 0.7;
+    margin: 0.5em 0;
+    letter-spacing: 0.05em;
+}
+
 /* Lab Section Styling */
 #albums {
     position: relative;
     z-index: 5;
-    padding: 2em 0 3em; /* Reduced padding */
+    padding: 3em 2em 4em;
+    pointer-events: none; /* Allow mouse events to pass through to canvas */
     /* Keep existing background styles */
     background:
         repeating-linear-gradient(
@@ -143,6 +190,27 @@ header h1 {
         linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.2) 100%);
 }
 
+#albums h2 {
+    text-align: center;
+    font-size: clamp(1.5em, 4vw, 2em);
+    margin-bottom: 1.5em;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-accent);
+    position: relative;
+}
+
+#albums h2::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5em;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+}
+
 /* Lab Shelf Noise Effect */
 #albums::before {
     content: '';
@@ -154,69 +222,33 @@ header h1 {
     mix-blend-mode: overlay;
 }
 
-/* Carousel Container */
+/* Albums Container (no carousel) */
 .carousel-container {
   position: relative;
   max-width: 1200px;
   margin: 0 auto 2em; /* Center horizontally with bottom margin */
-  padding: 0 3em; /* Space for navigation buttons */
+  padding: 0; /* no side padding needed without nav buttons */
+  overflow: visible; /* let receipts expand page naturally */
+  pointer-events: none; /* Allow mouse events to pass through to canvas */
 }
 
-/* Carousel Navigation */
-.carousel-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: var(--color-white);
-  font-size: 1.2em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  transition: all var(--transition-fast) ease;
-}
+/* Carousel Navigation removed */
+.carousel-nav { display: none !important; }
 
-.carousel-nav.prev { left: 0; }
-.carousel-nav.next { right: 0; }
-
-.carousel-nav:hover,
-.carousel-nav:focus-visible {
-  background: rgba(255,255,255,0.2);
-}
-
-/* Updated Albums List */
+/* Albums List (grid-like, no scroll) */
 .albums-carousel {
   display: flex;
-  justify-content: center; /* Center the albums */
-  gap: 2em; /* Reduced from 3em */
-  overflow-x: auto;
-  overflow-y: visible;
-  padding: 2em 1em; /* Reduced padding */
-  margin: 0;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2em;
+  overflow: visible;
+  padding: 2em 0;
+  margin: 0 auto;
   list-style: none;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
+  max-width: 1200px;
 }
 
 /* Scrollbar Styling */
-.albums-carousel::-webkit-scrollbar {
-    height: 10px;
-    background: rgba(0,0,0,0.3);
-    border-radius: 10px;
-}
-
-.albums-carousel::-webkit-scrollbar-thumb {
-    background: linear-gradient(90deg, var(--color-mushroom-brown), var(--color-mushroom-tan));
-    border-radius: 10px;
-    border: 2px solid rgba(0,0,0,0.3);
-}
 
 /* Petri Dish Container */
 .dish {
@@ -239,6 +271,7 @@ header h1 {
     will-change: transform;
     transition: transform var(--transition-medium) cubic-bezier(0.4, 0, 0.2, 1);
     isolation: isolate;
+    pointer-events: auto; /* Keep dishes clickable */
 }
 
 /* Glass Rim Effect */
@@ -307,8 +340,8 @@ header h1 {
 
 /* Custom Palette Support */
 .dish {
-    --primary-color: var(--color-mushroom-brown);
-    --secondary-color: var(--color-mushroom-tan);
+    --primary-color: var(--color-primary);
+    --secondary-color: var(--color-accent);
     --glow-color: var(--color-white);
 }
 
@@ -379,45 +412,7 @@ header h1 {
     pointer-events: none;
 }
 
-/* Lab Label Styling */
-.label {
-    position: absolute;
-    bottom: 15%;
-    right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 0.75em 1.5em;
-    border-radius: 4px 0 0 4px;
-    color: var(--color-black);
-    font-size: 0.9em;
-    transform: translateX(0);
-    transition: transform var(--transition-medium) cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: var(--z-label);
-    box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05);
-}
-
-.label::before {
-    content: '';
-    position: absolute;
-    top: 0.75em;
-    left: 0.75em;
-    width: 6px;
-    height: 6px;
-    background: #ff3b30;
-    border-radius: 50%;
-    box-shadow: 0 0 2px rgba(255, 59, 48, 0.4), inset 0 0 2px rgba(0, 0, 0, 0.2);
-}
-
-.label .title {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 0.25em;
-}
-
-.label .year {
-    display: block;
-    font-size: 0.85em;
-    opacity: 0.7;
-}
+/* Lab Label Styling - Removed as requested */
 
 .quick-actions {
     display: flex;
@@ -477,9 +472,6 @@ header h1 {
     opacity: 0.1;
 }
 
-.dish.active .label {
-    transform: translateX(-20px);
-}
 
 /* New Album Details Container */
 .album-details-container {
@@ -550,18 +542,341 @@ header h1 {
   list-style-position: outside;
 }
 
+/* Papery Receipt Tracklist Styles (flow in layout) */
+.tracklist-receipt {
+  position: relative;
+  width: calc(var(--dish-size) * 0.8); /* match dish */
+  margin: 0.75em auto 0; /* center under dish */
+  background: 
+    linear-gradient(180deg, 
+      #f5f2e8 0%, 
+      #e8e4d9 50%, 
+      #f0ebe0 100%
+    );
+  color: #2c2416;
+  font-family: 'Courier New', monospace;
+  font-size: 0.75em;
+  padding: 0;
+  border-radius: 3px 3px 8px 8px;
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.2),
+    0 8px 16px rgba(0,0,0,0.1),
+    inset 0 1px 0 rgba(255,255,255,0.5);
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  transition: opacity var(--transition-medium) ease, visibility 0s var(--transition-medium), height 0s var(--transition-medium);
+  pointer-events: none;
+  
+  /* Paper texture effect */
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(139, 115, 85, 0.03) 2px,
+      rgba(139, 115, 85, 0.03) 4px
+    ),
+    linear-gradient(180deg, 
+      #f5f2e8 0%, 
+      #e8e4d9 50%, 
+      #f0ebe0 100%
+    );
+}
+
+/* Show receipt when dish is active */
+.dish.active .tracklist-receipt[aria-hidden="false"] {
+  opacity: 1;
+  visibility: visible;
+  height: auto;
+  overflow: visible;
+  transition: opacity var(--transition-medium) ease, visibility 0s, height 0s;
+  pointer-events: auto; /* Keep receipt interactive when visible */
+}
+
+/* Receipt Header + Lab Tape */
+.receipt-header {
+  position: relative;
+  padding: 0.75em 1em;
+  border-bottom: 2px dashed rgba(139, 115, 85, 0.2);
+  text-align: center;
+  background: rgba(0,0,0,0.02);
+}
+
+/* Lab tape suggestion */
+.receipt-header::before,
+.receipt-header::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  width: 70px;
+  height: 18px;
+  background: rgba(255,255,255,0.7);
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+  transform: rotate(-4deg);
+  z-index: 2;
+  opacity: 0.9;
+}
+
+.receipt-header::before {
+  left: 12px;
+}
+
+.receipt-header::after {
+  right: 12px;
+  transform: rotate(4deg);
+}
+
+.receipt-title {
+  display: block;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 0.25em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  outline: none;
+}
+
+.receipt-year {
+  display: block;
+  opacity: 0.6;
+  font-size: 0.9em;
+}
+
+/* Receipt Tracks */
+.receipt-tracks {
+  padding: 0.5em 0.75em;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  
+  /* Custom scrollbar for receipt */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139, 115, 85, 0.3) transparent;
+}
+
+.receipt-tracks::-webkit-scrollbar {
+  width: 6px;
+}
+
+.receipt-tracks::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.receipt-tracks::-webkit-scrollbar-thumb {
+  background: rgba(139, 115, 85, 0.3);
+  border-radius: 3px;
+}
+
+/* Track Items */
+.track-item {
+  display: flex;
+  align-items: baseline;
+  padding: 0.4em 0;
+  border-bottom: 1px dotted rgba(139, 115, 85, 0.1);
+  position: relative;
+}
+
+.track-item:last-child {
+  border-bottom: none;
+}
+
+.track-number {
+  flex: 0 0 24px;
+  opacity: 0.5;
+  font-size: 0.85em;
+}
+
+.track-name {
+  flex: 1;
+  padding: 0 0.5em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-time {
+  flex: 0 0 auto;
+  opacity: 0.6;
+  font-size: 0.85em;
+  text-align: right;
+}
+
+/* Track item hover */
+.track-item:hover {
+  background: rgba(139, 115, 85, 0.05);
+}
+
+/* Receipt Footer */
+.receipt-footer {
+  padding: 0.75em;
+  border-top: 2px dashed rgba(139, 115, 85, 0.2);
+  background: rgba(0,0,0,0.02);
+}
+
+/* Inline embed placeholder (square, compact) */
+.receipt-embed {
+  margin: 0.75em auto 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.05);
+  width: min(238px, 90%);
+  aspect-ratio: 1 / 1; /* keep it square */
+}
+
+.receipt-embed iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.receipt-actions {
+  display: flex;
+  gap: 0.5em;
+  justify-content: center;
+}
+
+.receipt-action {
+  padding: 0.4em 0.8em;
+  background: rgba(139, 115, 85, 0.1);
+  border: 1px solid rgba(139, 115, 85, 0.2);
+  border-radius: 3px;
+  color: #2c2416;
+  text-decoration: none;
+  font-size: 0.9em;
+  transition: all var(--transition-fast) ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.receipt-action:hover,
+.receipt-action:focus-visible {
+  background: rgba(139, 115, 85, 0.2);
+  border-color: rgba(139, 115, 85, 0.3);
+  transform: translateY(-1px);
+}
+
+.receipt-action .icon {
+  font-size: 0.9em;
+}
+
+/* Navigation Styling */
+.mycelial-nav {
+    margin-top: 2em;
+}
+
+.mycelial-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    flex-wrap: wrap;
+}
+
+.mycelial-nav li {
+    position: relative;
+}
+
+.mycelial-nav a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.5em 0;
+    position: relative;
+    transition: color var(--transition-fast) ease;
+    pointer-events: auto; /* Keep links clickable */
+}
+
+.mycelial-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--color-primary);
+    transition: width var(--transition-fast) ease;
+}
+
+.mycelial-nav a:hover,
+.mycelial-nav a:focus {
+    color: var(--color-white);
+}
+
+.mycelial-nav a:hover::after,
+.mycelial-nav a:focus::after {
+    width: 100%;
+}
+
+/* Footer Styling */
+footer {
+    margin-top: 4em;
+    padding: 3em 2em;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%);
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+footer p {
+    margin: 0.5em 0;
+    opacity: 0.8;
+}
+
+.footer-links {
+    margin-top: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75em;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color var(--transition-fast) ease;
+    padding: 0.25em 0.5em;
+}
+
+.footer-links a:hover {
+    color: var(--color-white);
+}
+
+.footer-links .separator {
+    opacity: 0.3;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .albums-carousel {
-    justify-content: flex-start; /* Left align on small screens */
+    justify-content: center;
   }
   
   .dish-btn {
-    width: calc(var(--dish-size) * 0.7); /* Even smaller on mobile */
+    width: calc(var(--dish-size) * 0.7);
     height: calc(var(--dish-size) * 0.7);
   }
   
   .album-details {
     padding: 1em;
   }
+  
+  .tracklist-receipt {
+    width: calc(var(--dish-size) * 0.7);
+    font-size: 0.7em;
+  }
+}
 }
